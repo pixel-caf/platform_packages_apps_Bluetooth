@@ -4858,6 +4858,11 @@ public final class Avrcp {
             String deviceAddress) {
         BluetoothDevice device = mAdapter.getRemoteDevice(deviceAddress);
         int deviceIndex = getIndexForDevice(device);
+        Log.v(TAG,"processRegisterNotification: eventId" + eventId);
+        if (deviceIndex == INVALID_DEVICE_INDEX) {
+            Log.v(TAG,"device entry not present, bailing out");
+            return;
+        }
         int currPlayState = convertPlayStateToPlayStatus
                 (deviceFeatures[deviceIndex].mCurrentPlayState);
 
@@ -4868,11 +4873,6 @@ public final class Avrcp {
             currPlayState = PLAYSTATUS_REV_SEEK;
         }
 
-        Log.v(TAG,"processRegisterNotification: eventId" + eventId);
-        if (deviceIndex == INVALID_DEVICE_INDEX) {
-            Log.v(TAG,"device entry not present, bailing out");
-            return;
-        }
         switch (eventId) {
             case EVT_PLAY_STATUS_CHANGED:
                 deviceFeatures[deviceIndex].mPlayStatusChangedNT =
