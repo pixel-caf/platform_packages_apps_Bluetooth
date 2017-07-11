@@ -4834,8 +4834,11 @@ public final class Avrcp {
                 if (param <= 0)
                    param = 1;
 
+                long update_interval = SystemProperties.getLong("persist.bt.avrcp.pos_time", 3000L);
                 deviceFeatures[deviceIndex].mPlayPosChangedNT = NOTIFICATION_TYPE_INTERIM;
-                deviceFeatures[deviceIndex].mPlaybackIntervalMs = (long)param * 1000L;
+                update_interval = Math.max((long)param * 1000L, update_interval);
+
+                deviceFeatures[deviceIndex].mPlaybackIntervalMs = update_interval;
                 sendPlayPosNotificationRsp(true, deviceIndex);
                 if (DEBUG)
                     Log.v(TAG,"mPlayPosChangedNT updated for index " +
